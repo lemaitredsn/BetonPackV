@@ -18,6 +18,8 @@ public class SetUpGUI {
     JPanel panelProtokol;
     JTabbedPane tabbed;
 
+    // todo комментарии считаются злом, отучайся их писать так как их хочется написать тогда, когда написал плохой код и приходится его обьяснять
+    // В интернете должно быть полно информации по тому как это делать
     //ПРОТОКОЛ
     JButton buttonProtokol = new JButton("Сохранить и открыть");
     JTextField fieldDateProtokol = new JTextField("", 5);
@@ -117,6 +119,8 @@ public class SetUpGUI {
     JTextField fieldAktiv3 = new JTextField("", 5);
 
 
+    //todo Очень большой метод, надо его разбивать на логические части типо initContainer() initRow()
+    //todo SetUpGUI с маленькой буквы
     public SetUpGUI() {
         frame = new JFrame("BetonPac");
         ImageIcon icon = new ImageIcon("src/main/resources/icon.png");
@@ -135,6 +139,8 @@ public class SetUpGUI {
         Font font = new Font("Arial", Font.PLAIN, 16);
         Font fontForLabel = new Font("Arial", Font.PLAIN, 14);
         tabbed.setFont(font);
+        // todo нарушил принцип DRY очень много где по проекту. Прочитай про него и везде где я напишу DRY попробуй исправить.
+        // Тут тебе отвалю подсказку как это сделать: ставь шрифты в отдельном методе через цыкл, а не вручную https://stackoverflow.com/questions/12730230/set-the-same-font-for-all-component-java
         //Шрифты ПРОТОКОЛА
         labelNameBetCh.setFont(fontForLabel);
         fieldNameBetCH.setFont(fontForLabel);
@@ -176,6 +182,7 @@ public class SetUpGUI {
         comboBoxVozrast.setFont(fontForLabel);
         buttonProtokol.setFont(fontForLabel);
         panelProtokol.setLayout(new GridBagLayout());
+        // todo DRY
         panelProtokol.add(labelNameBetCh, new GridBagConstraints(1, 1, 1, 1, 0, 0,
                 GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
                 new Insets(10, 2, 10, 2), 0, 0));
@@ -201,6 +208,7 @@ public class SetUpGUI {
         //Quality GUI
         panelQuality.setLayout(new GridBagLayout());
 
+        // todo DRY
         panelQuality.add(labelDocKach, new GridBagConstraints(1, 1, 1, 1, 0, 0,
                 GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL,
                 new Insets(5, 2, 5, 2), 0, 10));
@@ -303,6 +311,8 @@ public class SetUpGUI {
 
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
+            // todo Что это за префикс S? переменные должны быть с маленькой буквы и забудь про префиксы, от них везде отказались
+            // todo Вынести в метод getProtokol()
             String SfieldNumberProtokol = fieldDataOtg.getText().replace(".", "") + " - "
                     + fieldDocKach.getText() + "/" + comboBoxVozrast.getSelectedItem();
             String SfieldDateProtokol = fieldDateProtokol.getText();
@@ -317,6 +327,7 @@ public class SetUpGUI {
             String SfieldDateIzgot = fieldDataOtg.getText();
             String SfieldDateIsp = null;
             try {
+                // todo создать getDate() и туда запихать все это вместе с траем кэтчем
                 SfieldDateIsp = datetoString(getDateIspitaniya(stringToDate(SfieldDateIzgot), SfieldVozrast));
             } catch (Exception e) {
                 e.printStackTrace();
@@ -345,7 +356,7 @@ public class SetUpGUI {
 
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
-
+            // todo все переменные с маленькой буквы
             String DocKach = fieldDataOtg.getText().replace(".", "") + " - " + fieldDocKach.getText();
             String Potreb = (String) comboboxCompany.getSelectedItem();
             String DataOtg = fieldDataOtg.getText();
@@ -366,6 +377,7 @@ public class SetUpGUI {
             String MassDob = (String) comboBoxnameDobavka.getSelectedItem() + " - " + fieldMassDob.getText() + "кг";
             String strComboBoxBetonCM = (String) comboBoxBetonClassMarka.getSelectedItem();
             String[] arrayBetonMK = getDataBeton(strComboBoxBetonCM);
+            // todo ты вот подписал все, а можешь просто сделать enam c этими значениями и хэшмап вместо массива в которой ключем будет значения из энама. А потом делать так betonMK.get(P4), betonMK.get(5_20)
             String MarkUd = arrayBetonMK[0];//П4
             String SohrUd = arrayBetonMK[1];//5-20
             String Zapoln = arrayBetonMK[2];//20
@@ -414,6 +426,7 @@ public class SetUpGUI {
     public String[] getDataBeton(String str) {
         String BetonString[] = new String[8];
         if(str.equals("B3,5 M50")){
+            // todo зачем все это ветвение если результат всегда один?
             BetonString = new String[]{"П4", "5-20", "20", "28", "32,7", "0,56", "5,19", "101"};
         }else if (str.equals("B5 M75")) {
             BetonString = new String[]{"П4", "5-20", "20", "28", "32,7", "0,56", "5,19", "101"};
@@ -472,14 +485,14 @@ public class SetUpGUI {
 
 
     public LocalDate stringToDate(String string) throws Exception {
-
+        // todo зачем ты создаешь все эти локальные переменные? По чему ты не можешь использовать string на прямую
         String str = string;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         LocalDate dateTime = LocalDate.parse(str, formatter);
         return dateTime;
     }
 
-
+    // todo Ставить наименьшую область(модификатор, тут private) видимости всегда и всем
     public LocalDate getDateIspitaniya(LocalDate date, String Sutok) {
         LocalDate d = date;
         String s = Sutok;
